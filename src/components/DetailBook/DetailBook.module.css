@@ -1,0 +1,32 @@
+.button{
+    width: 220px;
+    padding: 15px 10px !important;
+}
+
+.button + .button{
+    margin-left: 20px
+}
+
+.headerGroup{
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.displayLinebreak {
+    white-space: pre-line;
+}
+
+.message{
+    padding: 8px;
+    margin: 8px 0;
+    color: #2489F4;
+    background-color: #C9F0FF;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.message.error{
+    color: #F63B2F;
+    background-color: #FFCACA;
+}

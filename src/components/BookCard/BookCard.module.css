@@ -1,0 +1,27 @@
+.salesLabel{
+    background-color: #e71414;
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 1;
+}
+
+.salesText{
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.9em;
+}
+
+.bookName{
+    line-height: 1.5em;
+    min-height: 3em;
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

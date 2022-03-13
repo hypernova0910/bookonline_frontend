@@ -1,12 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import MenuProvider from './context/MenuProvider'
+import AuthProvider from './context/AuthProvider'
+import SnackbarProvider from './context/SnackbarProvider'
+import { BrowserRouter as Router} from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <SnackbarProvider>
+        <AuthProvider>
+          <MenuProvider>
+            <App />
+          </MenuProvider>
+        </AuthProvider>
+      </SnackbarProvider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,0 +1,11 @@
+.bodyBg{
+    background-color: white;
+}
+
+.dFlex{
+    display: flex;
+}
+
+.hidden{
+    display: none!important;
+}

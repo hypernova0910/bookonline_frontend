@@ -1,0 +1,25 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+}
+
+.button{
+    box-shadow: 2px 3px 5px #ccc;
+    font-size: 14px;
+    color: #fff!important;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border: 0;
+    border-radius: 25px;
+    width: 220px;
+    display: inline-block;
+    background-image: linear-gradient(to right, #ff9800, #F7695D);
+    transition: transform .2s;
+}
+
+.button:hover{
+    opacity: 0.9;
+}
