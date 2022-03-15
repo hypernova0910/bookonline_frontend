@@ -30,3 +30,18 @@
     color: #F63B2F;
     background-color: #FFCACA;
 }
+
+.rating{
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0 !important;
+}
+
+.rating.ratingStar{
+    align-items: center;
+    
+}
+
+.rating.ratingPercent{
+    justify-content: center;
+}

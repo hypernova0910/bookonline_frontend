@@ -16,7 +16,6 @@ export default ({ children }) => {
 
   useEffect(() => {
     CustomerService.loggedId().then((res) => {
-      console.log(res.data)
       dispatch({type: "loggedId", id: res.data})
     })
   }, [])

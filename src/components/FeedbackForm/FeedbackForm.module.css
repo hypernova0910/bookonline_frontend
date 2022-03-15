@@ -1,0 +1,16 @@
+/* @media screen and (min-width: 480px) {
+    .dialog{
+        min-width: calc(100vw);
+    }
+} */
+
+/* .dialog{
+    min-width: calc(100vw / 2);
+} */
+
+.stars{
+    /* width: 100%; */
+    display: table!important;
+    margin: 10px auto;
+    /* justify-content: center; */
+}

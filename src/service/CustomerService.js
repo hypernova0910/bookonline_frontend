@@ -23,6 +23,11 @@ class CustomerService{
         let api = CUSTOMER_REST_API_URL + 'removeCookie'
         return axios.get(api, {withCredentials: true})
     }
+
+    getOneById(id){
+        let api = CUSTOMER_REST_API_URL + 'getOneById/' + id
+        return axios.get(api, {withCredentials: true})
+    }
 }
 
 export default new CustomerService()
