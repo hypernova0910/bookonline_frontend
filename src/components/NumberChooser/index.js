@@ -25,56 +25,47 @@ NumberChooser.defaultProps = {
     step: 1
 }
 
-export default function NumberChooser({max, min, value, precision, step}){
-    const [count, setCount] = useState(value)
+export default function NumberChooser({max, min, value, precision, step, setValue, size = 'medium'}){
+    // const [count, setCount] = useState(value)
 
-    function onChangeNumber(e){
-        // if(e.target.value > max){
-        //     setCount(max)
-        // }
-        // else if(e.target.value < min){
-        //     setCount(min)
-        // }
-        // else{
-        //     setCount(e.target.value)
-        // }
-        setCount(e.target.value)
-    }
+    // function onChangeNumber(e){
+    //     setCount(e.target.value)
+    // }
 
     function onBlur(e){
         if(e.target.value > max && !isNaN(max)){
-            setCount(max)
+            setValue(max)
         }
         else if(e.target.value < min && !isNaN(min)){
-            setCount(min)
+            setValue(min)
         }
         else{
             //console.log(parseInt(e.target.value))
-            setCount(parseInt(parseFloat(e.target.value).toFixed(precision)))
+            setValue(parseInt(parseFloat(e.target.value).toFixed(precision)))
         }
     }
 
     function onIncrease(e){
-        if(count < max || isNaN(max)){
-            setCount(count + step)
+        if(value < max || isNaN(max)){
+            setValue(value + step)
         }
     }
 
     function onDecrease(e){
-        if(count > min || isNaN(min)){
-            setCount(count - step)
+        if(value > min || isNaN(min)){
+            setValue(value - step)
         }
     }
 
     return(
         <div className={styles.wrapper}>
-            <IconButton onClick={onDecrease}>
+            <IconButton size={size} onClick={onDecrease}>
                 <RemoveIcon/>
             </IconButton>
-            <IconButton>
-                <input value={count} onChange={onChangeNumber} onBlur={onBlur} className={styles.number}/>
+            <IconButton size={size}>
+                <input value={value} onChange={(e) => setValue(e.target.value)} onBlur={onBlur} className={styles.number}/>
             </IconButton>
-            <IconButton onClick={onIncrease}>
+            <IconButton size={size} onClick={onIncrease}>
                 <AddIcon/>
             </IconButton>
         </div>

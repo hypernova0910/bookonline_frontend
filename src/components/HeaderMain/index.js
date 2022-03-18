@@ -22,10 +22,13 @@ import Tooltip from '@mui/material/Tooltip';
 //my components
 import SignInDialog from '../SignInDialog'
 import {AuthContext} from '../../context/AuthProvider'
+import {CartContext} from '../../context/CartProvider'
+import CartPopover from '../CartPopover'
 
 //hooks
 import useMenu from '../../hooks/useMenu'
 import useSnackbar from '../../hooks/useSnackbar'
+import { useNavigate } from 'react-router-dom';
 
 //styles
 import commonStyles from '../../common/Common.module.css';
@@ -75,18 +78,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElCart, setAnchorElCart] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const [open, setOpen] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isCartPopoverOpen = Boolean(anchorElCart)
 
   const {toggleDrawer} = useMenu()
   // const {idCustomer, loginAsCustomer} = useAuth()
   const [ state, dispatch ] = React.useContext(AuthContext);
+  const [ cart, dispatchCart ] = React.useContext(CartContext);
 
   const {toast} = useSnackbar()
+  const navigate = useNavigate();
 
   // React.useEffect(() => {
   //   CustomerService.loggedId().then((res) => {
@@ -98,9 +105,9 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleLoginOpen = (event) => {
-    setOpen(true)
-  }
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -110,6 +117,18 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+
+  const handleCartPopoverOpen = (event) => {
+    setAnchorElCart(event.currentTarget);
+  }
+
+  const handleCartPopoverClose = (event) => {
+    setAnchorElCart(null);
+  }
+
+  const handleLoginOpen = (event) => {
+    setOpen(true)
+  }
 
   const handleLogOut = () => {
     setAnchorEl(null);
@@ -122,9 +141,9 @@ export default function PrimarySearchAppBar() {
     })
   }
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
+  const goToCart = () => {
+    navigate('/cart');
+  }
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -167,7 +186,7 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={Array.isArray(cart.cartBooks) ? cart.cartBooks.length : 0} color="error">
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
@@ -234,13 +253,19 @@ export default function PrimarySearchAppBar() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Tooltip title="Giỏ hàng">
-              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={0} color="error">
+            {/* <Tooltip title="Giỏ hàng"> */}
+              <IconButton 
+              size="large" 
+              color="inherit" 
+              // onMouseEnter={handleCartPopoverOpen}
+              // onMouseLeave={handleCartPopoverClose}
+              onClick={goToCart}
+              >
+                <Badge badgeContent={Array.isArray(cart.cartBooks) ? cart.cartBooks.length : 0} color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
-            </Tooltip>
+            {/* </Tooltip> */}
             
             {/* <IconButton
               size="large"
@@ -296,6 +321,11 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <CartPopover 
+      open={isCartPopoverOpen} 
+      anchorEl={anchorElCart} 
+      // onOpen={handleCartPopoverOpen} 
+      onClose={handleCartPopoverClose}/>
       <SignInDialog open={open} handleClose={() => setOpen(false)}/>
     </Box>
   );

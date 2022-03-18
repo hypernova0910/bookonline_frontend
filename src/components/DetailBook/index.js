@@ -27,6 +27,7 @@ import Constant from '../../common/Constant'
 
 import BookService from '../../service/BookService'
 import FeedbackService from '../../service/FeedbackService'
+import CartService from '../../service/CartService'
 
 import BookList from '../BookList'
 import LinearProgressWithLabel from '../LinearProgressWithLabel'
@@ -34,6 +35,7 @@ import FeedbackList from '../FeedbackList';
 import FeedbackForm from '../FeedbackForm';
 
 import {AuthContext} from '../../context/AuthProvider'
+import {CartContext} from '../../context/CartProvider'
 
 import useSnackbar from '../../hooks/useSnackbar'
 
@@ -42,6 +44,7 @@ export default function DetailBook({book}){
     const [feedbacks, setFeedbacks] = React.useState([])
     const [page, setPage] = React.useState(1)
     const [limit, setLimit] = React.useState(10)
+    const [count, setCount] = React.useState(1)
     const [statistic, setStatistic] = React.useState({
         "book_id": 0,
         "star1": 0.0,
@@ -54,6 +57,7 @@ export default function DetailBook({book}){
     })
     const [feedbackFormOpen, setFeedbackFormOpen] = React.useState(false)
     const [idCustomer, dispatch] = React.useContext(AuthContext)
+    const [ cart, dispatchCart ] = React.useContext(CartContext);
     const {toast} = useSnackbar()
 
     React.useEffect(() => {
@@ -76,6 +80,47 @@ export default function DetailBook({book}){
             })
         }
     }, [book, page, limit])
+
+    const addToCart = () => {
+        console.log(count)
+        if(idCustomer > 0){
+            if(cart.cartBooks == null){
+                cart.cartBooks = []
+            }
+            if(!cart.cartBooks.some((cartBook) => cartBook.id.book_id == book.id)){
+                cart.cartBooks.push({
+                    "id": {
+                        "book_id": book.id,
+                        "cart_id": cart.id
+                    },
+                    "book_count": count,
+                    cart: {id: cart.id},
+                    book: {id: book.id},
+                    sell_price: book.sell_price * (100 -book.discount_percent) / 100,
+                    total_money: (book.sell_price * (100 -book.discount_percent) / 100) * count,
+                })
+            }
+            else{
+                let i = cart.cartBooks.findIndex((cartBook) => cartBook.id.book_id == book.id)
+                cart.cartBooks[i].book_count += count
+            }
+            //console.log(cart)
+            CartService.update(cart)
+            .then((response) => {
+                toast('success', 'Thêm vào giỏ hàng thành công')
+                CartService.getCartByCustomerId(idCustomer).then((res) => {
+                    //console.log(res.data)
+                    dispatchCart({type: "assign", cart: res.data})
+                })
+            })
+            .catch((error) => {
+                console.error(error)
+                toast('error', 'Thêm vào giỏ hàng thất bại')
+            })
+                
+            
+        }
+    }
 
     const onClickWriteFeedback = (e) => {
         setFeedbackFormOpen(true)
@@ -143,10 +188,10 @@ export default function DetailBook({book}){
                         </Typography>
                         <div className="d-flex flex-row">
                             <label style={{paddingRight: '20px'}}>Số lượng</label>
-                            <NumberChooser value={1} min={1} max={book.count} step={1}/>
+                            <NumberChooser value={count} setValue={setCount} min={1} max={book.count} step={1}/>
                         </div>
                         <div className={"d-flex flex-row py-4 " + (book.count > 0 ? '' : commonStyles.hidden)}>
-                            <Button className={styles.button} variant="outlined" startIcon={<AddShoppingCartIcon />}>
+                            <Button onClick={addToCart} className={styles.button} variant="outlined" startIcon={<AddShoppingCartIcon />}>
                                 Thêm vào giỏ hàng
                             </Button>
                             <Button className={styles.button} variant="contained">

@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import SignInForm from '../SignInForm'
+import SignUpForm from '../SignUpForm'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -96,7 +97,7 @@ export default function SignInDialog(props) {
                     <SignInForm onClose={props.handleClose}/>
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
-                    Item Two
+                    <SignUpForm onClose={props.handleClose}/>
                 </TabPanel>
             </DialogContent>
           {/* <DialogTitle>Subscribe</DialogTitle> */}

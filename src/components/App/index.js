@@ -5,6 +5,7 @@ import Body from '../Body'
 import Footer from '../FooterMain'
 import DetailPage from '../DetailPage'
 import BodyProductGroup from '../BodyProductGroup'
+import CartPage from '../CartPage'
 
 import styles from './App.module.css'
 
@@ -38,6 +39,7 @@ export default function App(){
                     <Routes>
                         {routes}
                         <Route path='/chi-tiet/:id' element={<DetailPage/>}/>
+                        <Route path='/cart' element={<CartPage/>}/>
                         <Route exact path='/' element={<Body/>}/>
                         <Route path="*"/>
                     </Routes>
