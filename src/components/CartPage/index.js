@@ -25,6 +25,8 @@ import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 
+import {useNavigate} from 'react-router-dom'
+
 function CustomNoRowsOverlay(props){
     return (
         <div style={{height: 'auto', width: '838px', position: 'absolute', top: '56px', bottom: '0px'}}><div className={styles.noRows}>Giỏ hàng trống</div></div>
@@ -42,6 +44,8 @@ export default function CartPage(props){
     const [selectionModel, setSelectionModel] = React.useState([]);
     const [total, setTotal] = React.useState(0)
 
+    const navigate = useNavigate();
+
     const columns = [
         // { field: 'id', headerName: 'ID', width: 90 },
         {
@@ -56,6 +60,7 @@ export default function CartPage(props){
                 component="img"
                 image={params.value ? (Constant.IMAGE_URL + params.value) : ''}
                 alt={'ẢNH'}
+                onClick={() => {navigate('/chi-tiet/' + params.id)}}
                 />
             )
         },
@@ -67,7 +72,7 @@ export default function CartPage(props){
             // headerAlign: "center",
             // align: 'center',
             renderCell: (params) => (
-                <div className='d-flex' style={{flexDirection: 'column', justifyContent: 'space-between', height: '100%'}}>
+                <div className='d-flex' style={{flexDirection: 'column', justifyContent: 'space-between', height: '100%', whiteSpace: 'normal'}}>
                     <h5 style={{padding: '20px 10px'}}>{params.value.name}</h5>
                     <h6 style={{padding: '20px 10px'}}>
                         <span style={{fontWeight: 'bold'}}>
@@ -91,10 +96,10 @@ export default function CartPage(props){
         //   editable: true,
             renderCell: (params) => (
                 <NumberChooser 
-                value={bookCountState[params.value.id]} 
+                value={bookCountState[params.id]} 
                 // setValue={setCount} 
                 min={1} 
-                max={params.value.total_count} 
+                max={params.value} 
                 step={1}
                 size='small'
                 setValue={(value) => {
@@ -105,7 +110,7 @@ export default function CartPage(props){
                     // cart.cartBooks[i].book_count = value
                     let totalTemp = 0
                     for(let i = 0; i < cart.cartBooks.length; i++) {
-                        if(cart.cartBooks[i].id.book_id == params.value.id){
+                        if(cart.cartBooks[i].id.book_id == params.id){
                             cart.cartBooks[i].book_count = value
                         }
                         if(selectionModel.includes(cart.cartBooks[i].id.book_id)) {
@@ -113,7 +118,7 @@ export default function CartPage(props){
                         }
                     }
                     CartService.update(cart).then((res) => {
-                        setBookCountState({...bookCountState, [params.value.id]: value})
+                        setBookCountState({...bookCountState, [params.id]: value})
                         setTotal(totalTemp)
                     }).finally(() => {
                         setLoading(false)
@@ -180,7 +185,7 @@ export default function CartPage(props){
                     id: book.id,
                     thumb_nail: book.thumb_nail,
                     nameAndPrice: {name: book.name, price: book.sell_price, discount_percent: book.discount_percent},
-                    book_count: {total_count: book.count, id: book.id},
+                    book_count: book.count,
                     total_money: book_count * (book.sell_price * (100 - book.discount_percent) / 100),
                     delete: {id: book.id, price: book.sell_price * (100 - book.discount_percent) / 100},
                 }

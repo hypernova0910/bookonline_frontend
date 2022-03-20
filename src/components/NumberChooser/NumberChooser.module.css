@@ -9,7 +9,8 @@
     width: 2em;
     border: 0;
     outline: none;
-    text-align: center
+    text-align: center;
+    background-color: inherit;
 }
 
 .number::focus{
